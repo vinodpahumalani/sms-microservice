@@ -1,0 +1,45 @@
+{
+  "name": "sms-microservice",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "test": "mocha dist/**/*.spec.js",
+    "prestart": "npm run -s build",
+    "start": "node dist/bin/www",
+    "watch": "nodemon --watch dist/ dist/bin/www",
+    "clean": "rimraf dist",
+    "build": "npm run clean &&  babel src -s -D -d dist",
+    "watch-build": "npm run clean && babel src --watch -s -D -d dist"
+  },
+  "babel": {
+    "presets": [
+      [
+        "@babel/preset-env",
+        {
+          "targets": {
+            "node": "15.3.0"
+          }
+        }
+      ]
+    ]
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "express": "~4.16.1",
+    "joi": "^17.4.0",
+    "mongodb": "^3.6.4",
+    "morgan": "~1.9.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.13.10",
+    "@babel/core": "^7.13.10",
+    "@babel/preset-env": "^7.13.10",
+    "chai": "^4.3.4",
+    "eslint": "^7.21.0",
+    "eslint-plugin-node": "^11.1.0",
+    "faker": "^5.4.0",
+    "mocha": "^8.3.2",
+    "rimraf": "^3.0.2"
+  }
+}
