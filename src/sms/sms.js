@@ -19,7 +19,6 @@ export default function sms(smsInfo) {
   }
 
   function normalize({ appName, smsService, mobileNo, ...otherObjects }) {
-    console.log({ appName, smsService })
     return {
       ...otherObjects,
       appName: appName.toLowerCase(),

@@ -4,10 +4,11 @@ import makeDb from "../db"
 import adaptRequest from "../helpers/adapt-request"
 import makeSmsRepository from "./sms-repository"
 import smsEndpoinsHandler from "./sms-endpoint"
+import sendSms from "./send-sms"
 
 const database = makeDb()
 const smsRepository = makeSmsRepository({ database })
-export const handleSmsRequest = smsEndpoinsHandler({ smsRepository })
+export const handleSmsRequest = smsEndpoinsHandler({ smsRepository, sendSms })
 
 router
   .route("/")

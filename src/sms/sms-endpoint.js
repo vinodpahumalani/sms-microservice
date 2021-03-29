@@ -3,7 +3,7 @@ import makeHttpError from "../helpers/http-error"
 import { ValidationError } from "joi"
 import { ObjectID } from "mongodb"
 
-export default function makeSmsEndpointHandler({ smsRepository }) {
+export default function makeSmsEndpointHandler({ smsRepository, sendSms }) {
   return async function handle(httpRequest) {
     switch (httpRequest.method) {
       case "POST":
@@ -81,7 +81,18 @@ export default function makeSmsEndpointHandler({ smsRepository }) {
 
     try {
       smsInfo = await smsBodyObjectSchema.validateAsync(smsInfo)
-      const result = await smsRepository.add({ smsInfo })
+
+      const sentResult = await sendSms(
+        smsInfo.smsService,
+        smsInfo.countryCode,
+        smsInfo.mobileNo,
+        smsInfo.messageBody
+      )
+      console.log({ sentResult: JSON.stringify(sentResult) })
+      const result = await smsRepository.add({
+        ...smsInfo,
+        sentFrom: sentResult.from,
+      })
       return {
         headers: {
           "Content-Type": "application/json",

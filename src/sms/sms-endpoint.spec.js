@@ -1,3 +1,4 @@
+import "../environment"
 import { expect } from "chai"
 import { handleSmsRequest } from "./sms.routes"
 

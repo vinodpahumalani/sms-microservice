@@ -1,0 +1,21 @@
+version: "2"
+
+services:
+  node-app:
+    env_file:
+      - ./env/.env.production
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: sms-microservice
+    ports:
+      - "3000:3000"
+    links:
+      - mongodb
+
+  mongodb:
+    image: mongo:4.2
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    command: mongod

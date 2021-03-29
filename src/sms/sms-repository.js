@@ -3,26 +3,25 @@ import sms from "./sms"
 export default function makeSms({ database }) {
   return Object.freeze({
     add,
-    // findByMobileNo,
     findById,
     find,
-    // findBySmsService,
     // update,
-    // remove
+    remove,
   })
 
-  async function add({ smsInfo }) {
+  async function add({ ...smsInfo }) {
     try {
       const db = await database
       const sms = {
         ...smsInfo,
         date: Date.now(),
         status: 0,
+        sentFrom: `TX-${smsInfo.smsService.toUpperCase()}`,
       }
-      const { result, ops } = await db.collection("sms").insert(sms)
+      const { insertedCount, ops } = await db.collection("sms").insertOne(sms)
 
       return {
-        success: result.acknowledge,
+        success: insertedCount == 1,
         created: documentToSms(ops[0]),
       }
     } catch (error) {
@@ -44,20 +43,30 @@ export default function makeSms({ database }) {
     }
   }
 
-  async function find({ query, offset, limit }) {
+  async function find({ query = {}, offset = 0, limit = 10 } = {}) {
     try {
       const db = await database
       const smsRecords = await db
         .collection("sms")
         .find(query)
-        .skip(offset ?? 0)
-        .limit(limit ?? 10)
+        .skip(offset)
+        .limit(limit)
         .toArray()
 
       return {
         success: true,
         result: smsRecords.map((smsRecord) => documentToSms(smsRecord)),
       }
+    } catch (error) {
+      throw error
+    }
+  }
+
+  async function remove(query = {}) {
+    try {
+      const db = await database
+      const { deletedCount } = await db.collection("sms").deleteMany(query)
+      return deletedCount
     } catch (error) {
       throw error
     }

@@ -3,10 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "test": "mocha dist/**/*.spec.js",
+    "test": "set NODE_ENV=test && mocha dist/**/*.spec.js",
     "prestart": "npm run -s build",
-    "start": "node dist/bin/www",
-    "watch": "nodemon --watch dist/ dist/bin/www",
+    "start": "set NODE_ENV=production && node dist/bin/www",
+    "watch": "set NODE_ENV=production && nodemon --watch dist/ dist/bin/www",
+    "db-test": "mocha --require @babel/register __test__/*.spec.js",
     "clean": "rimraf dist",
     "build": "npm run clean &&  babel src -s -D -d dist",
     "watch-build": "npm run clean && babel src --watch -s -D -d dist"
@@ -26,15 +27,20 @@
   "dependencies": {
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
+    "dotenv": "^8.2.0",
     "express": "~4.16.1",
     "joi": "^17.4.0",
     "mongodb": "^3.6.4",
-    "morgan": "~1.9.1"
+    "morgan": "~1.9.1",
+    "nexmo": "^2.9.1",
+    "swagger-ui-express": "^4.1.6",
+    "twilio": "^3.59.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.13.10",
     "@babel/core": "^7.13.10",
     "@babel/preset-env": "^7.13.10",
+    "@babel/register": "^7.13.8",
     "chai": "^4.3.4",
     "eslint": "^7.21.0",
     "eslint-plugin-node": "^11.1.0",
