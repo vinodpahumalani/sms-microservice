@@ -16,17 +16,17 @@ const nexmo = new Nexmo({
 export default function sendSms(from, countryCode, mobile, message) {
   const to = countryCode.replace("+", "") + mobile
   return new Promise((resolve, reject) => {
-    // nexmo.message.sendSms(from, to, message, (error, response) => {
-    //   if (error) {
-    // reject(error)
-    // } else {
-    resolve({
-      from,
-      countryCode,
-      mobile,
-      message,
+    nexmo.message.sendSms(from, to, message, (error, response) => {
+      if (error) {
+        reject(error)
+      } else {
+        resolve({
+          from,
+          countryCode,
+          mobile,
+          message,
+        })
+      }
     })
-    //   }
-    // })
   })
 }
